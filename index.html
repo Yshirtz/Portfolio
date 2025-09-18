@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tab Title: Change to your name -->
+    <title>이승엽 - AI 엔지니어 포트폴리오</title>
+    <style>
+        /* Basic Styling */
+        :root {
+            --primary-color: #007bff; /* 친근한 파란색 계열 */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --background-color: #ffffff;
+            --shadow-color: rgba(0,0,0,0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            background: var(--light-color);
+            color: var(--dark-color);
+        }
+        .container {
+            max-width: 960px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: var(--dark-color);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #nav-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li a {
+            color: #fff;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links li a:hover {
+            color: var(--primary-color);
+        }
+
+        .lang-switcher button {
+            background: none;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .lang-switcher button:hover, .lang-switcher button.active {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+
+        /* Hero Section */
+        #hero {
+            background: var(--background-color);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        #hero h1 {
+            font-size: 3em;
+            margin-bottom: 0.5rem;
+        }
+
+        #hero p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* General Section Styling */
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--dark-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        /* Section-specific Styles */
+        #about img {
+            display: block;
+            margin: 20px auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+        #about p {
+            text-align: center;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        #skills ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        #skills li {
+            display: inline-block;
+            background: #e0e0e0;
+            color: var(--dark-color);
+            padding: 8px 18px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+         #skills li:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        .card {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--background-color);
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow-color);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+
+        #contact {
+            text-align: center;
+        }
+        #contact p a {
+             color: var(--primary-color);
+             text-decoration: none;
+        }
+        #contact p a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            background: var(--dark-color);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <span id="nav-title" data-lang-ko="이승엽" data-lang-en="Seung-yeop Lee">이승엽</span>
+            <div class="lang-switcher">
+                <button id="lang-ko" class="active">KR</button>
+                <button id="lang-en">EN</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <h1 data-lang-ko="이승엽" data-lang-en="Seung-yeop Lee">이승엽</h1>
+            <p data-lang-ko="데이터와 모델로 새로운 가치를 만드는 AI 엔지니어" data-lang-en="An AI Engineer Creating New Value with Data and Models">데이터와 모델로 새로운 가치를 만드는 AI 엔지니어</p>
+        </section>
+
+        <section id="about" class="container">
+            <h2 data-lang-ko="소개" data-lang-en="About Me">소개</h2>
+            <img src="https://placehold.co/150x150/007bff/white?text=Profile" alt="프로필 사진">
+            <p data-lang-ko="안녕하세요! 저는 인공지능 기술을 통해 복잡한 문제를 해결하는 것을 즐기는 AI 엔지니어 이승엽입니다. 특히 자연어 처리(NLP)와 컴퓨터 비전 분야에 깊은 관심을 가지고 있으며, 최신 딥러닝 모델을 연구하고 실제 서비스에 적용하는 경험을 쌓아왔습니다. 효율적이고 확장 가능한 AI 솔루션을 만드는 것을 목표로 하고 있습니다." data-lang-en="Hello! I'm Seung-yeop Lee, an AI Engineer who enjoys solving complex problems through artificial intelligence technology. I have a deep interest in Natural Language Processing (NLP) and Computer Vision, with experience in researching and applying the latest deep learning models to real-world services. My goal is to create efficient and scalable AI solutions.">
+                안녕하세요! 저는 인공지능 기술을 통해 복잡한 문제를 해결하는 것을 즐기는 AI 엔지니어 이승엽입니다. <br>
+                특히 자연어 처리(NLP)와 컴퓨터 비전 분야에 깊은 관심을 가지고 있으며, 최신 딥러닝 모델을 연구하고 실제 서비스에 적용하는 경험을 쌓아왔습니다. <br>
+                효율적이고 확장 가능한 AI 솔루션을 만드는 것을 목표로 하고 있습니다.
+            </p>
+        </section>
+
+        <section id="skills" class="container">
+            <h2 data-lang-ko="기술 스택" data-lang-en="Skills">기술 스택</h2>
+            <ul>
+                <!-- 자신의 기술 스택을 자유롭게 추가/수정하세요 -->
+                <li>Python</li>
+                <li>TensorFlow</li>
+                <li>PyTorch</li>
+                <li>Scikit-learn</li>
+                <li>Pandas</li>
+                <li>NumPy</li>
+                <li>SQL</li>
+                <li>Docker</li>
+                <li>Git</li>
+                <li>AWS</li>
+            </ul>
+        </section>
+
+        <section id="projects" class="container">
+            <h2 data-lang-ko="프로젝트" data-lang-en="Projects">프로젝트</h2>
+            
+            <div class="card">
+                <h3 data-lang-ko="프로젝트 1: 수어 번역 및 채팅 클라이언트 개발" data-lang-en="Project 1: Sign Language Translation & Chat Client">프로젝트 1: 수어 번역 및 채팅 클라이언트 개발</h3>
+                <p>
+                    <strong data-lang-ko="설명:" data-lang-en="Description:">설명:</strong>
+                    <span data-lang-ko="MediaPipe와 Socket 통신을 활용하여 실시간으로 수어를 텍스트로 번역하고, 번역된 텍스트를 전송할 수 있는 간단한 채팅 클라이언트 프로그램을 개발했습니다." data-lang-en="Developed a real-time sign language to text translation system using MediaPipe and created a simple chat client program to transmit the translated text via Socket communication.">MediaPipe와 Socket 통신을 활용하여 실시간으로 수어를 텍스트로 번역하고, 번역된 텍스트를 전송할 수 있는 간단한 채팅 클라이언트 프로그램을 개발했습니다.</span>
+                </p>
+                <p>
+                    <strong data-lang-ko="사용 기술:" data-lang-en="Technologies Used:">사용 기술:</strong>
+                    <span>Python, OpenCV, MediaPipe, Socket</span>
+                </p>
+                <p>
+                    <strong data-lang-ko="링크:" data-lang-en="Links:">링크:</strong>
+                    <a href="#" target="_blank" data-lang-ko="깃허브 저장소" data-lang-en="GitHub Repository">깃허브 저장소</a>
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 data-lang-ko="프로젝트 2: 딥러닝 기반 상품 이미지 분류 모델" data-lang-en="Project 2: Deep Learning-based Product Image Classification Model">프로젝트 2: 딥러닝 기반 상품 이미지 분류 모델</h3>
+                <p>
+                    <strong data-lang-ko="설명:" data-lang-en="Description:">설명:</strong>
+                    <span data-lang-ko="CNN(Convolutional Neural Network) 모델을 활용하여 전자상거래 플랫폼의 상품 이미지를 자동으로 분류하는 시스템을 개발했습니다. 정확도 95%를 달성하여 수동 분류 작업 시간을 80% 단축했습니다." data-lang-en="Developed a system to automatically classify product images on an e-commerce platform using a CNN model. Achieved 95% accuracy, reducing manual classification time by 80%.">CNN(Convolutional Neural Network) 모델을 활용하여 전자상거래 플랫폼의 상품 이미지를 자동으로 분류하는 시스템을 개발했습니다. 정확도 95%를 달성하여 수동 분류 작업 시간을 80% 단축했습니다.</span>
+                </p>
+                <p>
+                    <strong data-lang-ko="사용 기술:" data-lang-en="Technologies Used:">사용 기술:</strong>
+                    <span>Python, TensorFlow, Keras, OpenCV</span>
+                </p>
+                <p>
+                    <strong data-lang-ko="링크:" data-lang-en="Links:">링크:</strong>
+                    <a href="#" target="_blank" data-lang-ko="깃허브 저장소" data-lang-en="GitHub Repository">깃허브 저장소</a> | <a href="#" target="_blank" data-lang-ko="관련 발표자료" data-lang-en="Related Presentation">관련 발표자료</a>
+                </p>
+            </div>
+        </section>
+
+        <section id="experience" class="container">
+            <h2 data-lang-ko="경력 및 학력" data-lang-en="Experience & Education">경력 및 학력</h2>
+            <div class="card">
+                <h3 data-lang-ko="Microsoft AI School 수강중 (2025.09.15 ~ 현재)" data-lang-en="Attending Microsoft AI School (Sep 2025 ~ Present)">Microsoft AI School 수강중 (2025.09.15 ~ 현재)</h3>
+                <p data-lang-ko="AI기반 바이브코딩 및 프로젝트 작성과 최신 AI트렌드 및 업무 역량 강화" data-lang-en="Developing AI-based projects and enhancing job skills with the latest AI trends.">AI기반 바이브코딩 및 프로젝트 작성과 최신 AI트렌드 및 업무 역량 강화</p>
+            </div>
+            <div class="card">
+                <h3 data-lang-ko="수원대학교 | 정보보안학과 (2018.03 ~ 현재)" data-lang-en="Suwon University | Dept. of Information Security (Mar 2018 ~ Present)">수원대학교 | 정보보안학과 (2018.03 ~ 현재)</h3>
+            </div>
+        </section>
+
+        <section id="contact" class="container">
+            <h2 data-lang-ko="연락처" data-lang-en="Contact">연락처</h2>
+            <p data-lang-ko="새로운 기회에 대해 언제나 열려있습니다. 아래 연락처로 편하게 연락 주세요!" data-lang-en="I am always open to new opportunities. Feel free to contact me!">
+                새로운 기회에 대해 언제나 열려있습니다. 아래 연락처로 편하게 연락 주세요!
+            </p>
+            <p>
+                <!-- Edit with your email, GitHub, etc. -->
+                <strong>Email:</strong> imyeop44@gmail.com | 
+                <strong>GitHub:</strong> <a href="https://github.com/Yshirtz" target="_blank">github.com/Yshirtz</a>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p data-lang-ko="&copy; 2025 이승엽. 모든 권리 보유." data-lang-en="&copy; 2025 Seung-yeop Lee. All Rights Reserved.">&copy; 2025 이승엽. 모든 권리 보유.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const langKoBtn = document.getElementById('lang-ko');
+            const langEnBtn = document.getElementById('lang-en');
+            const translatableElements = document.querySelectorAll('[data-lang-ko]');
+
+            const switchLanguage = (lang) => {
+                translatableElements.forEach(el => {
+                    // 'ko' -> 'langKo', 'en' -> 'langEn'으로 올바른 camelCase 키를 만듭니다.
+                    const key = 'lang' + lang.charAt(0).toUpperCase() + lang.slice(1);
+                    
+                    // data 속성에 해당 키가 있는 경우에만 텍스트를 변경합니다.
+                    if (el.dataset[key]) {
+                         // br 태그와 같은 HTML 구조를 유지하기 위해 innerHTML을 사용합니다.
+                        el.innerHTML = el.dataset[key];
+                    }
+                });
+
+                // Update active button style
+                if (lang === 'ko') {
+                    langKoBtn.classList.add('active');
+                    langEnBtn.classList.remove('active');
+                } else {
+                    langEnBtn.classList.add('active');
+                    langKoBtn.classList.remove('active');
+                }
+
+                // Change html lang attribute
+                document.documentElement.lang = lang;
+            };
+
+            langKoBtn.addEventListener('click', () => switchLanguage('ko'));
+            langEnBtn.addEventListener('click', () => switchLanguage('en'));
+        });
+    </script>
+</body>
+</html>
+
+
