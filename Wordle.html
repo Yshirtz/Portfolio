@@ -68,9 +68,12 @@
 </head>
 <body class="bg-neutral-800 text-white flex flex-col items-center justify-center min-h-screen p-4">
 
-    <div class="text-center mb-4">
+    <div class="relative w-full max-w-lg text-center mb-4">
         <h1 class="text-4xl font-bold tracking-wider">워들 게임</h1>
         <p class="text-neutral-400">5글자 영어 단어를 맞춰보세요.</p>
+        <button id="rules-btn" class="absolute top-0 right-0 bg-neutral-600 hover:bg-neutral-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+            규칙
+        </button>
     </div>
 
     <!-- 게임 보드 -->
@@ -84,7 +87,7 @@
     </div>
 
     <!-- 결과 메시지 모달 -->
-    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
+    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-40">
         <div class="bg-neutral-700 p-8 rounded-lg text-center shadow-xl">
             <h2 id="modal-title" class="text-3xl font-bold mb-4"></h2>
             <p id="modal-answer" class="text-xl mb-6"></p>
@@ -94,9 +97,27 @@
         </div>
     </div>
     
+    <!-- 규칙 모달 -->
+    <div id="rules-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-40">
+        <div id="rules-content" class="bg-neutral-700 p-8 rounded-lg shadow-xl max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-4 text-center">게임 규칙</h2>
+            <ul class="space-y-3 text-left">
+                <li>1. 5글자 영문 단어를 입력해주세요!</li>
+                <li>2. 단어가 아니거나(명사,동사,형용사), 글자 수가 모자라면 입력되지 않습니다!</li>
+                <li>3. 글자가 정답에 들어간다면 노란색, 위치까지 맞는다면 초록색으로 칠해집니다!</li>
+                <li>4. 즐거운 게임 되세요!</li>
+            </ul>
+        </div>
+    </div>
+
     <!-- 알림 메시지 -->
     <div id="notification" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white py-4 px-8 rounded-lg text-lg font-bold shadow-2xl transition-opacity duration-300 z-50">
         <!-- 메시지 내용이 여기에 들어갑니다 -->
+    </div>
+    
+    <!-- 로딩 오버레이 (현재는 사용 안함) -->
+    <div id="loader" class="hidden fixed inset-0 bg-neutral-900 bg-opacity-80 flex items-center justify-center z-50">
+        <div class="text-white text-2xl font-bold animate-pulse">새로운 단어를 찾는 중...</div>
     </div>
 
 
@@ -110,20 +131,17 @@
         const modalAnswer = document.getElementById('modal-answer');
         const playAgainBtn = document.getElementById('play-again-btn');
         const notification = document.getElementById('notification');
+        const loader = document.getElementById('loader');
+        const rulesBtn = document.getElementById('rules-btn');
+        const rulesModal = document.getElementById('rules-modal');
 
         // --- 게임 설정 ---
         const WORD_LENGTH = 5;
         const MAX_GUESSES = 6;
         
-        // 5글자 영어 단어 목록
-        const wordList = [
-            "APPLE", "HOUSE", "TIGER", "WATER", "MONEY", "TABLE", "CHAIR", "MUSIC", 
-            "WORLD", "HEART", "BRAIN", "POWER", "GHOST", "PLANT", "FRUIT", "STONE", 
-            "TRAIN", "PLANE", "OCEAN", "RIVER", "BEACH", "LIGHT", "NIGHT", "EARTH", 
-            "SPACE", "CLOUD", "STORM", "WHITE", "BLACK", "GREEN", "BROWN", "PEACE", 
-            "DREAM", "SMILE", "LAUGH", "HAPPY", "QUIET", "VOICE", "SOUND", "VIDEO", 
-            "AUDIO", "RADIO", "PHONE", "EMAIL", "PIZZA", "BREAD", "SUGAR", "CREAM", 
-            "HONEY", "LEMON", "GRAPE", "MANGO", "ABOUT", "ABOVE", "AFTER", "AGAIN"
+        // 유효한 5글자 영어 단어 목록 (명사, 동사, 형용사 포함)
+        const validWords = [
+            "ABOUT", "ABOVE", "ACTOR", "ADMIT", "ADULT", "AFTER", "AGAIN", "AGENT", "AGREE", "AHEAD", "ALARM", "ALBUM", "ALERT", "ALIKE", "ALIVE", "ALLOW", "ALONE", "ALONG", "ALTER", "AMONG", "ANGER", "ANGLE", "APPLE", "APPLY", "ARGUE", "ARISE", "ARMED", "ARRAY", "ASIDE", "ASSET", "AUDIO", "AUDIT", "AVOID", "AWARD", "AWARE", "BADLY", "BAKER", "BASIC", "BEACH", "BEGIN", "BEING", "BELOW", "BENCH", "BIRTH", "BLACK", "BLAME", "BLIND", "BLOCK", "BLOOD", "BOARD", "BOOST", "BRAIN", "BRAND", "BREAD", "BREAK", "BRIEF", "BRING", "BROAD", "BROWN", "BUILD", "BUNCH", "BUYER", "CABIN", "CABLE", "CARRY", "CATCH", "CAUSE", "CHAIN", "CHAIR", "CHARM", "CHART", "CHECK", "CHEST", "CHIEF", "CHILD", "CIVIL", "CLAIM", "CLASS", "CLEAN", "CLEAR", "CLICK", "CLOCK", "CLOSE", "COACH", "COAST", "COULD", "COUNT", "COVER", "CRAFT", "CRASH", "CREAM", "CRIME", "CROSS", "CROWD", "CYCLE", "DAILY", "DANCE", "DEATH", "DELAY", "DEPTH", "DOING", "DOUBT", "DRAFT", "DRAMA", "DRAWN", "DREAM", "DRINK", "DRIVE", "EARLY", "EARTH", "EIGHT", "EMAIL", "EMPTY", "ENEMY", "ENJOY", "ENTER", "EQUAL", "ERROR", "EVENT", "EVERY", "EXACT", "EXIST", "EXTRA", "FAITH", "FALSE", "FAULT", "FIBER", "FIELD", "FIFTH", "FIGHT", "FINAL", "FIRST", "FIXED", "FLASH", "FLESH", "FLIGHT", "FLOOR", "FOCUS", "FORCE", "FORTH", "FOUND", "FRAME", "FRESH", "FRONT", "FRUIT", "FULLY", "FUNNY", "GIANT", "GIVEN", "GLASS", "GLOBAL", "GOING", "GRACE", "GRADE", "GRAND", "GRANT", "GRASS", "GREAT", "GREEN", "GROUP", "GROWN", "GUARD", "GUESS", "GUEST", "GUIDE", "HAPPY", "HEART", "HEAVY", "HENCE", "HORSE", "HOTEL", "HOUSE", "HUMAN", "IDEAL", "IMAGE", "INDEX", "INNER", "INPUT", "ISSUE", "JOINT", "JUDGE", "KNOWN", "LARGE", "LAUGH", "LAYER", "LEARN", "LEAST", "LEAVE", "LEGAL", "LEMON", "LEVEL", "LIGHT", "LIMIT", "LOCAL", "LOGIC", "LOOSE", "LOWER", "LUCKY", "LUNCH", "MAJOR", "MAKER", "MANGO", "MARCH", "MATCH", "MAYBE", "MAYOR", "MEDIA", "METAL", "MIGHT", "MINOR", "MINUS", "MONEY", "MONTH", "MORAL", "MOTOR", "MOUSE", "MOUTH", "MOVIE", "MUSIC", "NAKED", "NEVER", "NEWLY", "NIGHT", "NOISE", "NORTH", "NOTED", "NOVEL", "NURSE", "OCCUR", "OCEAN", "OFFER", "OFTEN", "ONION", "ORDER", "OTHER", "OUGHT", "OWNER", "PAINT", "PANEL", "PAPER", "PARTY", "PEACE", "PHASE", "PHONE", "PHOTO", "PIECE", "PILOT", "PITCH", "PLACE", "PLAIN", "PLANE", "PLANT", "PLATE", "POINT", "POUND", "POWER", "PRESS", "PRICE", "PRIDE", "PRIME", "PRINT", "PRIOR", "PROOF", "PROUD", "PROVE", "QUEEN", "QUICK", "QUIET", "QUITE", "RADIO", "RAISE", "RANGE", "RAPID", "RATIO", "REACH", "REACT", "READY", "REFER", "RELAX", "REPLY", "RIGHT", "RIVER", "ROUGH", "ROUND", "ROUTE", "ROYAL", "RURAL", "SCALE", "SCENE", "SCOPE", "SCORE", "SENSE", "SERVE", "SEVEN", "SHALL", "SHAPE", "SHARE", "SHARP", "SHEET", "SHELF", "SHIFT", "SHIRT", "SHOCK", "SHOOT", "SHORT", "SHOWN", "SIGHT", "SINCE", "SIXTH", "SKILL", "SLEEP", "SLIDE", "SMALL", "SMART", "SMILE", "SMOKE", "SOLID", "SOLVE", "SORRY", "SOUND", "SOUTH", "SPACE", "SPEAK", "SPEED", "SPEND", "SPENT", "SPLIT", "SPOKE", "SPORT", "STAFF", "STAGE", "STAND", "START", "STATE", "STEAM", "STEEL", "STICK", "STILL", "STOCK", "STONE", "STORE", "STORM", "STORY", "STRIP", "STUDY", "STUFF", "STYLE", "SUGAR", "SUITE", "SUPER", "SWEET", "TABLE", "TAKEN", "TASTE", "TEACH", "THANK", "THEIR", "THEME", "THERE", "THESE", "THICK", "THING", "THINK", "THIRD", "THREE", "THROW", "TIGHT", "TIMES", "TIRED", "TITLE", "TODAY", "TOPIC", "TOTAL", "TOUCH", "TOUGH", "TOWER", "TRACK", "TRADE", "TRAIN", "TREAT", "TREND", "TRIAL", "TRIED", "TRUCK", "TRULY", "TRUST", "TRUTH", "TWICE", "UNDER", "UNION", "UNTIL", "UPPER", "URBAN", "USAGE", "USUAL", "VALID", "VALUE", "VIDEO", "VIRUS", "VISIT", "VITAL", "VOICE", "WASTE", "WATCH", "WATER", "WHEEL", "WHERE", "WHICH", "WHILE", "WHITE", "WHOLE", "WHOSE", "WOMAN", "WORLD", "WORRY", "WORSE", "WOULD", "WRITE", "WRONG", "YIELD", "YOUNG", "YOUTH"
         ];
         
         // --- 게임 상태 변수 ---
@@ -135,12 +153,15 @@
         // --- 게임 초기화 ---
         function init() {
             // 게임 상태 초기화
-            answer = wordList[Math.floor(Math.random() * wordList.length)];
-            console.log(`정답: ${answer}`); // 디버깅용 정답 출력
             currentRow = 0;
             currentCol = 0;
             isGameOver = false;
 
+            // 정답 단어 가져오기 (내부 목록에서)
+            answer = validWords[Math.floor(Math.random() * validWords.length)];
+            
+            console.log(`정답: ${answer}`); // 디버깅용 정답 출력
+            
             // 게임 보드 생성 및 초기화
             gameBoard.innerHTML = '';
             for (let i = 0; i < MAX_GUESSES * WORD_LENGTH; i++) {
@@ -236,11 +257,7 @@
         function submitGuess() {
             if (currentCol !== WORD_LENGTH) {
                 showNotification("글자 수가 부족합니다.");
-                const rowTiles = Array.from(gameBoard.children).slice(currentRow * WORD_LENGTH, (currentRow + 1) * WORD_LENGTH);
-                rowTiles.forEach(tile => {
-                    tile.classList.add('shake');
-                    setTimeout(() => tile.classList.remove('shake'), 500);
-                });
+                shakeRow();
                 return;
             }
 
@@ -249,13 +266,9 @@
             }).join('');
             
             // 사전에 있는 단어인지 확인
-            if (!wordList.includes(guess)) {
+            if (!validWords.includes(guess) && guess !== answer) {
                 showNotification("사전에 없는 단어입니다.");
-                const rowTiles = Array.from(gameBoard.children).slice(currentRow * WORD_LENGTH, (currentRow + 1) * WORD_LENGTH);
-                rowTiles.forEach(tile => {
-                    tile.classList.add('shake');
-                    setTimeout(() => tile.classList.remove('shake'), 500);
-                });
+                shakeRow();
                 return; // 추측을 제출하지 않음
             }
 
@@ -270,9 +283,20 @@
             }
         }
         
+        // --- 현재 행 흔들기 ---
+        function shakeRow() {
+            const rowTiles = Array.from(gameBoard.children).slice(currentRow * WORD_LENGTH, (currentRow + 1) * WORD_LENGTH);
+            rowTiles.forEach(tile => {
+                tile.classList.add('shake');
+                setTimeout(() => tile.classList.remove('shake'), 500);
+            });
+        }
+
         // --- 알림 메시지 표시 ---
-        function showNotification(message) {
+        function showNotification(message, isWarning = false) {
             notification.textContent = message;
+            notification.classList.remove('bg-red-500', 'bg-yellow-500');
+            notification.classList.add(isWarning ? 'bg-yellow-500' : 'bg-red-500');
             notification.classList.remove('hidden');
             notification.classList.add('opacity-100');
             setTimeout(() => {
@@ -333,7 +357,6 @@
             const keyBtn = keyboardContainer.querySelector(`[data-key="${key}"]`);
             if (!keyBtn) return;
             
-            // 더 좋은 상태로만 업데이트 (absent -> present -> correct)
             const currentState = keyBtn.classList.contains('correct') ? 'correct' :
                                  keyBtn.classList.contains('present') ? 'present' : 'absent';
 
@@ -359,18 +382,26 @@
         }
 
         // --- 이벤트 리스너 설정 ---
-        // 물리적 키보드 입력
         document.addEventListener('keydown', e => handleKeyPress(e.key));
         
-        // 가상 키보드 클릭
         keyboardContainer.addEventListener('click', e => {
             if (e.target.tagName === 'BUTTON') {
                 handleKeyPress(e.target.dataset.key);
             }
         });
         
-        // 다시하기 버튼
         playAgainBtn.addEventListener('click', init);
+
+        rulesBtn.addEventListener('click', () => {
+            rulesModal.classList.remove('hidden');
+        });
+
+        rulesModal.addEventListener('click', (e) => {
+            if (e.target === rulesModal) {
+                 rulesModal.classList.add('hidden');
+            }
+        });
+
 
         // --- 게임 시작 ---
         init();
